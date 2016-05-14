@@ -1,4 +1,4 @@
-// Generated on 2016-05-14 using generator-angular-fullstack 3.6.1
+// Generated on 2016-05-14 using generator-angular-fullstack 3.0.0
 'use strict';
 
 module.exports = function (grunt) {
@@ -57,17 +57,13 @@ module.exports = function (grunt) {
       }
     },
     watch: {
-      ts: {
-        files: ['<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock).ts'],
-        tasks: ['ts:client']
-      },
       ngconstant: {
         files: ['<%= yeoman.server %>/config/environment/shared.js'],
         tasks: ['ngconstant']
       },
       injectJS: {
         files: [
-          '<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock).ts',
+          '<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock).js',
           '!<%= yeoman.client %>/app/app.js'
         ],
         tasks: ['injector:scripts']
@@ -77,12 +73,12 @@ module.exports = function (grunt) {
         tasks: ['injector:css']
       },
       mochaTest: {
-        files: ['<%= yeoman.server %>/**/*.{spec,integration}.ts'],
+        files: ['<%= yeoman.server %>/**/*.{spec,integration}.js'],
         tasks: ['env:test', 'mochaTest']
       },
       jsTest: {
-        files: ['<%= yeoman.client %>/{app,components}/**/*.{spec,mock}.ts'],
-        tasks: ['newer:tslint:all', 'newer:ts:client_test',, 'wiredep:test', 'karma']
+        files: ['<%= yeoman.client %>/{app,components}/**/*.{spec,mock}.js'],
+        tasks: ['newer:jshint:all', 'wiredep:test', 'karma']
       },
       gruntfile: {
         files: ['Gruntfile.js']
@@ -90,7 +86,7 @@ module.exports = function (grunt) {
       livereload: {
         files: [
           '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.{css,html}',
-          '{.tmp,<%= yeoman.client %>}/{app,components}/**/!(*.spec|*.mock).ts',
+          '{.tmp,<%= yeoman.client %>}/{app,components}/**/!(*.spec|*.mock).js',
           '<%= yeoman.client %>/assets/images/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}'
         ],
         options: {
@@ -129,18 +125,9 @@ module.exports = function (grunt) {
         },
         src: ['<%= yeoman.server %>/**/*.{spec,integration}.js']
       },
-      all: ['<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock|app.constant).js'],
+      all: ['<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock).js'],
       test: {
         src: ['<%= yeoman.client %>/{app,components}/**/*.{spec,mock}.js']
-      }
-    },
-
-    tslint: {
-      options: {
-        configuration: '<%= yeoman.client %>/tslint.json'
-      },
-      all: {
-        src: ['<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock).ts']
       }
     },
 
@@ -248,7 +235,8 @@ module.exports = function (grunt) {
       dist: {
         src: [
           '<%= yeoman.dist %>/<%= yeoman.client %>/!(bower_components){,*/}*.{js,css}',
-          '<%= yeoman.dist %>/<%= yeoman.client %>/assets/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
+          '<%= yeoman.dist %>/<%= yeoman.client %>/assets/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+          '<%= yeoman.dist %>/<%= yeoman.client %>/assets/fonts/*'
         ]
       }
     },
@@ -275,9 +263,6 @@ module.exports = function (grunt) {
         ],
         // This is so we update image references in our ng-templates
         patterns: {
-          css: [
-            [/(assets\/images\/.*?\.(?:gif|jpeg|jpg|png|webp|svg))/gm, 'Update the CSS to reference our revved images']
-          ],
           js: [
             [/(assets\/images\/.*?\.(?:gif|jpeg|jpg|png|webp|svg))/gm, 'Update the JS to reference our revved images']
           ]
@@ -390,8 +375,7 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.dist %>',
           src: [
             'package.json',
-            '<%= yeoman.server %>/**/*',
-            '!<%= yeoman.server %>/config/local.env.sample.js'
+            '<%= yeoman.server %>/**/*'
           ]
         }]
       },
@@ -400,12 +384,6 @@ module.exports = function (grunt) {
         cwd: '<%= yeoman.client %>',
         dest: '.tmp/',
         src: ['{app,components}/**/*.css']
-      },
-      constant: {
-        expand: true,
-        cwd: '<%= yeoman.client %>',
-        dest: '.tmp/',
-        src: ['app/app.constant.js']
       }
     },
 
@@ -434,17 +412,11 @@ module.exports = function (grunt) {
     // Run some tasks in parallel to speed up the build process
     concurrent: {
       pre: [
-        'ngconstant',
-        'copy:constant'
+        'ngconstant'
       ],
       server: [
-        'ts:client',
-        'copy:constant',
       ],
       test: [
-        'ts:client',
-        'copy:constant',
-        'ts:client_test',
       ],
       debug: {
         tasks: [
@@ -456,8 +428,6 @@ module.exports = function (grunt) {
         }
       },
       dist: [
-        'ts:client',
-        'copy:constant',
         'imagemin'
       ]
     },
@@ -547,59 +517,28 @@ module.exports = function (grunt) {
     // Compiles ES6 to JavaScript using Babel
     babel: {
       options: {
-        sourceMap: true
+        sourceMap: true,
+        optional: [
+          'es7.classProperties'
+        ]
       },
       server: {
         options: {
-          plugins: [
-            'transform-class-properties',
-            'transform-runtime'
-          ]
+          optional: ['runtime']
         },
         files: [{
           expand: true,
           cwd: '<%= yeoman.server %>',
-          src: [
-            '**/*.js',
-            '!config/local.env.sample.js'
-          ],
+          src: ['**/*.{js,json}'],
           dest: '<%= yeoman.dist %>/<%= yeoman.server %>'
         }]
       }
     },
 
-    ts: {
-      options: {
-        sourceMap: true,
-        failOnTypeErrors: false
-      },
-      client: {
-        tsconfig: './tsconfig.client.json',
-        outDir: '.tmp'
-      },
-      client_test: {
-        tsconfig: './tsconfig.client.test.json',
-        outDir: '.tmp/test'
-      }
-    },
-
-    tsd: {
-      install: {
-        options: {
-          command: 'reinstall',
-          config: './tsd.json'
-        }
-      },
-      install_test: {
-        options: {
-          command: 'reinstall',
-          config: './tsd_test.json'
-        }
-      }
-    },
-
     injector: {
-      options: {},
+      options: {
+
+      },
       // Inject application script files into index.html (doesn't include bower)
       scripts: {
         options: {
@@ -607,11 +546,10 @@ module.exports = function (grunt) {
             var yoClient = grunt.config.get('yeoman.client');
             filePath = filePath.replace('/' + yoClient + '/', '');
             filePath = filePath.replace('/.tmp/', '');
-            filePath = filePath.replace('.ts', '.js');
             return '<script src="' + filePath + '"></script>';
           },
           sort: function(a, b) {
-            var module = /\.module\.(js|ts)$/;
+            var module = /\.module\.js$/;
             var aMod = module.test(a);
             var bMod = module.test(b);
             // inject *.module.js first
@@ -623,9 +561,8 @@ module.exports = function (grunt) {
         files: {
           '<%= yeoman.client %>/index.html': [
                [
-                 '<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock).ts',
-                 '<%= yeoman.client %>/app/app.constant.js',
-                 '!{.tmp,<%= yeoman.client %>}/app/app.{js,ts}'
+                 '{.tmp,<%= yeoman.client %>}/{app,components}/**/!(*.spec|*.mock).js',
+                 '!{.tmp,<%= yeoman.client %>}/app/app.js'
                ]
             ]
         }
@@ -678,7 +615,6 @@ module.exports = function (grunt) {
         'clean:server',
         'env:all',
         'concurrent:pre',
-        'tsd',
         'concurrent:server',
         'injector',
         'wiredep:client',
@@ -691,7 +627,6 @@ module.exports = function (grunt) {
       'clean:server',
       'env:all',
       'concurrent:pre',
-      'tsd',
       'concurrent:server',
       'injector',
       'wiredep:client',
@@ -723,9 +658,6 @@ module.exports = function (grunt) {
         'clean:server',
         'env:all',
         'concurrent:pre',
-        'ts:client',
-        'ts:client_test',
-        'tsd',
         'concurrent:test',
         'injector',
         'postcss',
@@ -752,10 +684,6 @@ module.exports = function (grunt) {
           'env:all',
           'env:test',
           'concurrent:pre',
-          'tsd:install',
-          'tsd:install_test',
-          'ts:client',
-          'ts:client_test',
           'concurrent:test',
           'injector',
           'wiredep:client',
@@ -810,7 +738,6 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'clean:dist',
     'concurrent:pre',
-    'tsd',
     'concurrent:dist',
     'injector',
     'wiredep:client',
@@ -829,7 +756,7 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('default', [
-    'newer:tslint',
+    'newer:jshint',
     'test',
     'build'
   ]);

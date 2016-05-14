@@ -14,15 +14,14 @@ module.exports = function(config) {
       // bower:js
       // endbower
       'node_modules/socket.io-client/socket.io.js',
-      '.tmp/app/app.js',
-      '.tmp/{app,components}/**/*.module.js',
-      '.tmp/{app,components}/**/*.js',
-      '.tmp/test/**/*.js',
+      'client/app/app.js',
+      'client/{app,components}/**/*.module.js',
+      'client/{app,components}/**/*.js',
       'client/{app,components}/**/*.html'
     ],
 
     preprocessors: {
-      '**/*.html': 'ng-html2js',
+      '**/*.html': 'ng-html2js'
     },
 
     ngHtml2JsPreprocessor: {

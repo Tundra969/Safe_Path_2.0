@@ -16,11 +16,11 @@ import path from 'path';
 import lusca from 'lusca';
 import config from './environment';
 import session from 'express-session';
-import connectMongo from 'connect-mongo';
-import mongoose from 'mongoose';
-var MongoStore = connectMongo(session);
+//import connectMongo from 'connect-mongo';
+//import mongoose from 'mongoose';
+//var mongoStore = connectMongo(session);
 
-export default function(app) {
+module.exports = function(app) {
   var env = app.get('env');
 
   app.set('views', config.root + '/server/views');
@@ -32,17 +32,17 @@ export default function(app) {
   app.use(methodOverride());
   app.use(cookieParser());
 
-  // Persist sessions with MongoStore / sequelizeStore
+  // Persist sessions with mongoStore / sequelizeStore
   // We need to enable sessions for passport-twitter because it's an
   // oauth 1.0 strategy, and Lusca depends on sessions
   app.use(session({
     secret: config.secrets.session,
     saveUninitialized: true,
     resave: false,
-    store: new MongoStore({
-      mongooseConnection: mongoose.connection,
-      db: 'test-project'
-    })
+    // store: new mongoStore({
+    //   mongooseConnection: mongoose.connection,
+    //   db: 'test-project'
+    // })
   }));
 
   /**
@@ -73,13 +73,7 @@ export default function(app) {
   }
 
   if ('development' === env) {
-    app.use(require('connect-livereload')({
-      ignore: [
-        /^\/api\/(.*)/,
-        /\.js(\?.*)?$/, /\.css(\?.*)?$/, /\.svg(\?.*)?$/, /\.ico(\?.*)?$/, /\.woff(\?.*)?$/,
-        /\.png(\?.*)?$/, /\.jpg(\?.*)?$/, /\.jpeg(\?.*)?$/, /\.gif(\?.*)?$/, /\.pdf(\?.*)?$/
-      ]
-    }));
+    app.use(require('connect-livereload')());
   }
 
   if ('development' === env || 'test' === env) {
@@ -88,4 +82,4 @@ export default function(app) {
     app.use(morgan('dev'));
     app.use(errorHandler()); // Error handler - has to be last
   }
-}
+};

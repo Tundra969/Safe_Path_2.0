@@ -6,8 +6,8 @@
 'use strict';
 import Thing from '../api/thing/thing.model';
 
-Thing.find({}).remove()
-  .then(() => {
+Thing.find({}).removeAsync()
+  .then(function() {
     Thing.create({
       name: 'Development Tools',
       info: 'Integration with popular tools such as Bower, Grunt, Babel, Karma, ' +
