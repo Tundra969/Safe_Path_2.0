@@ -1,5 +1,6 @@
 'use strict';
 
+/*
 class NavbarController {
   //start-non-standard
   menu = [{
@@ -16,3 +17,5 @@ class NavbarController {
 
 angular.module('testProjectApp')
   .controller('NavbarController', NavbarController);
+
+*/

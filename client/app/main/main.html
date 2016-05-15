@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <!-- <navbar></navbar> -->
 
 <header class="hero-unit" id="banner">
@@ -32,7 +33,6 @@
         <option>20</option>
       </select><span> miles</span>
       <p></p>
-    </p>
     <label>Resource Type</label>
       <select>
         <option value="" disabled selected hidden>Please Choose...</option>
@@ -44,9 +44,15 @@
       </select>
       <p></p>
       <p>
-        <button type="submit" class="btn btn-primary" ng-click="main.addThing()">Find!</button>
-      <p>
+        <button type="submit" class="btn btn-primary" ng-click="main.testFunc()">Find!</button>
+      </p>
   </form>
+  <p ng-repeat="row in main.results">
+    <span>
+      {{row.name}}
+      {{row.visit_address.state}}
+    </span>
+  </p>
 </div>
 
 <footer></footer>
