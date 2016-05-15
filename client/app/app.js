@@ -9,9 +9,15 @@ angular.module('testProjectApp', [
   'ui.router',
   'ui.bootstrap'
 ])
-  .config(function($urlRouterProvider, $locationProvider) {
+  .config(function($urlRouterProvider, $stateProvider, $locationProvider) {
     $urlRouterProvider
       .otherwise('/');
+
+    $stateProvider
+      .state('profile', {
+        url: '/profile',
+        templateUrl: 'profile.html'
+      });
 
     $locationProvider.html5Mode(true);
   });

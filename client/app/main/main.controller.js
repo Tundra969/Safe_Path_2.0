@@ -15,6 +15,11 @@ angular.module('testProjectApp')
         self.results = response.data.data[0].practices;
       });
     };
+
+    this.showProfile = function() {
+      console.log("Something");
+    };
+
   });
 
 })();
