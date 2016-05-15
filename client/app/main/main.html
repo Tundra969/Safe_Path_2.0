@@ -47,12 +47,21 @@
         <button type="submit" class="btn btn-primary" ng-click="main.testFunc()">Find!</button>
       </p>
   </form>
-  <p ng-repeat="row in main.results">
-    <span>
+  <div ng-repeat="row in main.results">
+    <div>
       {{row.name}}
-      {{row.visit_address.state}}
-    </span>
-  </p>
+    </div>
+      <div>
+        {{row.visit_address.street}}
+      </div>
+      <div>
+        {{row.visit_address.state}}
+      </div>
+      <div>
+        {{row.visit_address.zip}}
+      </div>
+      <br />
+  </div>
 </div>
 
 <footer></footer>
