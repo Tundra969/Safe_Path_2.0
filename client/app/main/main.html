@@ -6,7 +6,7 @@
     <h1>Safe Path</h1>
     <p class="lead">Local Resources for Mental Wellbeing
     </p>
-    <!-- <img src="assets/images/yeoman.png" alt="I'm Yeoman"> -->
+    <!-- <img src="assets/images/map-4.png" alt="I'm Yeoman"> -->
   </div>
 </header>
 
@@ -19,7 +19,7 @@
       </ul>
     </div>
   </div>
-
+<img src="assets/images/map-4.png" alt="I'm a map">
   <form class="thing-form">
     <label>Zip Code</label>
     <p class="input-group">
@@ -53,15 +53,14 @@
     </div>
       <div>
         {{row.visit_address.street}}
+        {{row.visit_address.city}}, {{row.visit_address.state}} {{row.visit_address.zip}}
       </div>
-      <div>
-        {{row.visit_address.state}}
-      </div>
-      <div>
-        {{row.visit_address.zip}}
+      <div ng-repeat = "phone in row.phones">
+        {{phone.type}} : {{phone.number}}
       </div>
       <span ng-click="main.showProfile()">Go to Profile</span>
-      <br />
+
+      <hr/>
   </div>
 </div>
 
