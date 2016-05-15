@@ -47,7 +47,7 @@
         <button type="submit" class="btn btn-primary" ng-click="main.testFunc()">Find!</button>
       </p>
   </form>
-  <div ng-repeat="row in main.results">
+  <div ng-repeat="row in main.results" ng-hide="main.isHidden">
     <div>
       {{row.name}}
     </div>
